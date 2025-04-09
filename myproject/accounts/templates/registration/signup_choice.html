@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Choix d'inscription</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f9f9f9;
+      text-align: center;
+      margin-top: 50px;
+    }
+    .button {
+      display: block;
+      width: 200px;
+      margin: 20px auto;
+      padding: 15px;
+      font-size: 16px;
+      background-color: #007BFF;
+      color: #fff;
+      text-decoration: none;
+      border-radius: 5px;
+    }
+    .button:hover {
+      background-color: #0056b3;
+    }
+  </style>
+</head>
+<body>
+  <h2>Inscription</h2>
+  <p>Veuillez indiquer votre profil :</p>
+  <a href="{% url 'accounts:student_signup' %}" class="button">Étudiant</a>
+  <a href="{% url 'accounts:professor_signup' %}" class="button">Professeur</a>
+</body>
+</html>
