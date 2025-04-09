@@ -4,10 +4,13 @@ from .views import home, delete_text,update_typing_data,update_list,save_user_ty
 from django.contrib import admin
 from .views import save_typing_event
 from django.contrib.auth import views as auth_views
+from . import views
 
+app_name = 'text_analysis' 
 
 urlpatterns = [
-    path('', home, name='home'),  # Page principale
+    path('', views.home, name='home'),  
+    path('analyze/', views.analyze, name='analyze'),
     path('save/', save_text, name='save_text'),  # Route pour sauvegarder
     path('delete_text/<int:text_id>/', delete_text, name='delete_text'),
     #path('save-typing/', save_typing, name='save_typing'),
@@ -18,8 +21,6 @@ urlpatterns = [
     path("save_typing_event/", save_typing_event, name="save_typing_event"),
     path('login/', auth_views.LoginView.as_view(template_name='login.html'), name='login'),
     path('logout/', auth_views.LogoutView.as_view(), name='logout'),
-    path('', home, name='home'),
-
 ]
 
 

@@ -142,7 +142,7 @@ def home(request):
                 list_position=list_position, 
                 list_progression=list_progression
             )
-            return redirect('home')  # Redirige après avoir sauvegardé
+            return redirect('text_analysis:home')  # Redirige après avoir sauvegardé
 
     return render(request, 'home.html', {'result': result, 'saved_texts': saved_texts})
 
@@ -151,7 +151,7 @@ def save_text(request):
         text = request.POST.get("text", "")
         score = 0
         SavedText.objects.create(text=text, score=score)
-        return redirect('home')
+        return redirect('text_analysis:home')
     return JsonResponse({"error": "Méthode non autorisée"}, status=400)
 
 def delete_text(request, text_id):
@@ -159,7 +159,7 @@ def delete_text(request, text_id):
     text.delete()
     if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
         return JsonResponse({'message': 'Texte supprimé avec succès!'})
-    return redirect('home')
+    return redirect('text_analysis:home')
 
 from django.http import JsonResponse
 from .models import UserTyping
