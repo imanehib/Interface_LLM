@@ -1,6 +1,7 @@
 from django.contrib.auth.views import LoginView, LogoutView
 from django.shortcuts import render, redirect
 from django.contrib.auth import login, get_user_model
+from django.contrib.auth.decorators import login_required
 from .forms import StudentSignUpForm, ProfessorSignUpForm
 
 # Récupère le modèle utilisateur personnalisé
@@ -51,6 +52,18 @@ def professor_signup(request):
         form = ProfessorSignUpForm()
     return render(request, 'registration/professor_signup.html', {'form': form})
 
-# Nouvelle vue qui affiche le choix : étudiant ou professeur
+# choix : étudiant ou professeur
 def signup_choice(request):
     return render(request, 'registration/signup_choice.html')
+
+@login_required
+def dashboard(request):
+    user = request.user
+    # Vous pouvez personnaliser le contenu en fonction du rôle
+    if user.role == 'professor':
+        template = 'accounts/professor_dashboard.html'
+    elif user.role == 'student':
+        template = 'accounts/student_dashboard.html'
+    else:
+        template = 'accounts/dashboard.html'
+    return render(request, template, {})
