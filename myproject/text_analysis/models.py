@@ -40,7 +40,7 @@ User = get_user_model()
 class Exercise(models.Model):
     author      = models.ForeignKey(User, on_delete=models.CASCADE, related_name='exercises')
     title       = models.CharField(max_length=200)
-    content     = models.TextField(default="", help_text="Entrez votre énoncé de l’exercice")
+    content     = models.TextField(default="")
     created_at  = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):

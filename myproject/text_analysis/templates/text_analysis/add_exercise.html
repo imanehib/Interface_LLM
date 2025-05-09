@@ -6,6 +6,6 @@
     {% csrf_token %}
     {{ form.as_p }}
     <button type="submit" class="btn">Enregistrer</button>
-    <a href="{% url 'text_analysis:teacher_dashboard' %}" class="btn-return">← Retour</a>
+    <a href="{% url 'accounts:professor_dashboard' %}" class="btn-return">← Retour</a>
   </form>
 {% endblock %}

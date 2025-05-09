@@ -1,11 +1,12 @@
 from django.urls import path
+from . import views
 from .views import (
     CustomLoginView,
     CustomLogoutView,
     signup_choice,
     student_signup,
     professor_signup,
-    dashboard
+    professor_dashboard
 )
 
 app_name = 'accounts'
@@ -16,5 +17,5 @@ urlpatterns = [
     path('signup/', signup_choice, name='signup_choice'),
     path('signup/student/', student_signup, name='student_signup'),
     path('signup/professor/', professor_signup, name='professor_signup'),
-    path('dashboard/', dashboard,                  name='dashboard'),
+    path('professor-dashboard/', professor_dashboard, name='professor_dashboard'),
 ]

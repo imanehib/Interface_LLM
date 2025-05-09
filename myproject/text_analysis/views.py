@@ -7,6 +7,8 @@ import spacy
 from spellchecker import SpellChecker
 import re
 import language_tool_python
+from django.http import HttpResponseForbidden
+from django.contrib import messages
 
 # Charger spaCy avec le modèle français
 nlp = spacy.load("fr_core_news_sm")
@@ -327,14 +329,6 @@ def save_typing_event(request):
 
     return JsonResponse({"message": "Méthode non autorisée"}, status=405)
 
-
-@login_required
-def teacher_dashboard(request):
-    exercises = Exercise.objects.filter(author=request.user)
-    return render(request, 'text_analysis/teacher_dashboard.html', {
-        'exercises': exercises
-    })
-
 @login_required
 def add_exercise(request):
     if request.method == 'POST':
@@ -343,7 +337,23 @@ def add_exercise(request):
             ex = form.save(commit=False)
             ex.author = request.user
             ex.save()
-            return redirect('text_analysis:teacher_dashboard')
+            return redirect('accounts:professor_dashboard')
     else:
         form = ExerciseForm()
-    return render(request, 'add_exercise.html', {'form': form})
+    return render(request, 'text_analysis/add_exercise.html', {'form': form})
+
+@login_required
+def delete_exercise(request, pk):
+    exercise = get_object_or_404(Exercise, pk=pk)
+
+    if not hasattr(request.user, 'role') or request.user.role != 'professor':
+        return HttpResponseForbidden("Accès réservé aux professeurs.")
+    
+    if exercise.author != request.user:
+        return HttpResponseForbidden("Vous n'avez pas le droit de supprimer cet exercice")
+    
+    if request.method == 'POST':
+        exercise.delete()
+        messages.success(request, "Exercice supprimé avec succès.")
+    
+    return redirect('accounts:professor_dashboard')

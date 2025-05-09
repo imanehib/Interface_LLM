@@ -8,7 +8,7 @@ class ExerciseForm(forms.ModelForm):
         widgets = {
             'title':   forms.TextInput(attrs={'placeholder': "Titre de l'exercice"}),
             'content': forms.Textarea(attrs={
-                'rows': 10,
+                'rows': 6,
                 'placeholder': "Entrez ici l’énoncé…",
                 'style': 'font-family: monospace;'
             }),

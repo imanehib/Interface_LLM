@@ -1,15 +1,11 @@
 from django.contrib.auth.views import LoginView, LogoutView
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect , get_object_or_404
 from django.contrib.auth import login, get_user_model
 from django.contrib.auth.decorators import login_required
 from .forms import StudentSignUpForm, ProfessorSignUpForm
 from django.urls import reverse_lazy
-
-class CustomLoginView(LoginView):
-    template_name = 'registration/login.html'
-    # redirection automatique après succès
-    def get_success_url(self):
-        return reverse_lazy('accounts:dashboard')
+from ..text_analysis.models import Exercise
+from django.http import HttpResponseForbidden
 
 # Récupère le modèle utilisateur personnalisé
 CustomUser = get_user_model()
@@ -21,7 +17,12 @@ def index(request):
 class CustomLoginView(LoginView):
     template_name = 'registration/login.html'
     def get_success_url(self):
-        return reverse_lazy('accounts:dashboard')
+        if self.request.user.role == 'professor':
+            return reverse_lazy('accounts:professor_dashboard')
+        elif self.request.user.role == 'student':
+            return reverse_lazy('text_analysis:home')
+        return reverse_lazy('index')
+
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -66,7 +67,11 @@ def signup_choice(request):
     return render(request, 'registration/signup_choice.html')
 
 @login_required
-def dashboard(request):
-    if request.user.role == 'professor':
-        return render(request, 'professor_dashboard.html', {'exercises': request.user.exercises.all()})
-    return render(request, 'student_dashboard.html', {})
+def professor_dashboard(request):
+    if request.user.role != 'professor':
+        return HttpResponseForbidden("Accès interdit.")
+    
+    exercises = Exercise.objects.filter(author=request.user)
+    return render(request, 'professor_dashboard.html', {
+        'exercises': exercises
+    })

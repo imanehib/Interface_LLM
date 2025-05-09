@@ -13,6 +13,7 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 from pathlib import Path
 import os
 
+
 LOGIN_URL = 'login'  # L'URL vers la page de connexion
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -38,8 +39,8 @@ ALLOWED_HOSTS = []
 
 STATICFILES_DIRS = [os.path.join(BASE_DIR, 'text_analysis', 'static')]
 
-LOGIN_REDIRECT_URL = '/text-analysis/' 
-LOGOUT_REDIRECT_URL = '/'  # Redirige vers la page d'accueil après la déconnexion
+LOGIN_REDIRECT_URL = '/accounts/login/' 
+LOGOUT_REDIRECT_URL = 'index'  # Redirige vers la page d'accueil après la déconnexion
 
 # Application definition
 
@@ -58,7 +59,7 @@ MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
-    #'django.middleware.csrf.CsrfViewMiddleware',
+    'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
@@ -70,7 +71,7 @@ ROOT_URLCONF = 'myproject.myproject.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [ BASE_DIR / 'templates', BASE_DIR / 'text_analysis' / 'templates',  ],
+        'DIRS': [ BASE_DIR / 'templates', BASE_DIR / 'text_analysis' / 'templates', BASE_DIR / 'accounts' / 'templates', ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [

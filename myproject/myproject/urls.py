@@ -9,6 +9,7 @@ from myproject.accounts.views import index
 #from django.contrib.auth import views 
 
 
+
 urlpatterns = [
     path('', index, name='index'),  # page d'accueil
     path('text-analysis/', include('myproject.text_analysis.urls', namespace='text_analysis')),
