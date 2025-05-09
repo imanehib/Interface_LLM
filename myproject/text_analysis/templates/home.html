@@ -109,6 +109,26 @@
   </style>
 </head>
 <body>
+    <div class="container">
+
+    <!-- 🔓 Déconnexion en haut à droite -->
+    <div style="text-align: right; margin-bottom: 1rem;">
+      <form action="{% url 'accounts:logout' %}" method="post" style="display:inline;">
+        {% csrf_token %}
+        <button type="submit" style="
+          background-color: #e3342f;
+          color: white;
+          padding: 0.5rem 1rem;
+          border: none;
+          border-radius: 5px;
+          font-size: 0.9rem;
+          cursor: pointer;
+        ">
+          Déconnexion
+        </button>
+      </form>
+    </div>
+    
   <div class="container">
     <h2>Correcteur de texte</h2>
 
@@ -206,6 +226,7 @@
       </ul>
     </div>
   </div>
+
 
   <!-- Script d’affichage du bouton "Sauvegarder" et d’enregistrement des frappes -->
   <script>
