@@ -8,7 +8,19 @@ import language_tool_python
 
 # Charger spaCy avec le modèle français
 nlp = spacy.load("fr_core_news_sm")
-tool = language_tool_python.LanguageToolPublicAPI('fr')
+# tool = language_tool_python.LanguageToolPublicAPI('fr')
+
+tool = None
+
+def get_language_tool():
+    global tool
+    if tool is None:
+        try:
+            tool = language_tool_python.LanguageToolPublicAPI('fr')
+        except LanguageToolError:
+            # En fallback, on peut utiliser le serveur local embarqué
+            tool = language_tool_python.LanguageTool('fr')
+    return tool
 
 # Initialisation du correcteur orthographique
 spell_checker = SpellChecker(language='fr')
@@ -41,7 +53,8 @@ def correct_text(text):
                 sentence = " ".join(words)  
 
             # Vérification avec LanguageTool pour grammaire et conjugaison
-            matches = tool.check(sentence)
+            matches = get_language_tool().check(sentence)
+
             
             for match in matches:
                 error_word = match.context[match.offset:match.offset + match.errorLength]

@@ -1,9 +1,7 @@
 
 from django.db import models
-
-from django.db import models
-
-from django.db import models
+from django.contrib.auth.models import User
+from django.contrib.auth import get_user_model
 
 class SavedText(models.Model):
     text = models.TextField()
@@ -12,22 +10,8 @@ class SavedText(models.Model):
     updated_at = models.DateTimeField(auto_now=True)  # Ajoute ceci si ce champ n'est pas défini
 
     def __str__(self):
-        return self.text
-
-
-    def __str__(self):
         return self.text[:50]  # Afficher un extrait du texte
 
-# models.py
-
-from django.contrib.auth.models import User
-
-# models.py
-
-from django.db import models
-
-# models.py
-from django.db import models
 
 
 class UserTyping(models.Model):
@@ -40,7 +24,6 @@ class UserTyping(models.Model):
         return self.session_id  # Tu peux afficher ce qui te convient ici
 
 
-from django.db import models
 
 class TypingEvent(models.Model):
     session_id = models.CharField(max_length=255)  # ID de session unique
@@ -50,3 +33,15 @@ class TypingEvent(models.Model):
 
     def __str__(self):
         return f"Session {self.session_id} - Pos {self.cursor_position}"
+
+
+User = get_user_model()
+
+class Exercise(models.Model):
+    author      = models.ForeignKey(User, on_delete=models.CASCADE, related_name='exercises')
+    title       = models.CharField(max_length=200)
+    xml_content = models.TextField(help_text="Entrez votre énoncé en XML")
+    created_at  = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.title} par {self.author.username}"

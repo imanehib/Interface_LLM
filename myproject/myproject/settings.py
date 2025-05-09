@@ -38,7 +38,7 @@ ALLOWED_HOSTS = []
 
 STATICFILES_DIRS = [os.path.join(BASE_DIR, 'text_analysis', 'static')]
 
-LOGIN_REDIRECT_URL = '/'  # Redirige vers la page d'accueil après la connexion
+LOGIN_REDIRECT_URL = '/text-analysis/' 
 LOGOUT_REDIRECT_URL = '/'  # Redirige vers la page d'accueil après la déconnexion
 
 # Application definition

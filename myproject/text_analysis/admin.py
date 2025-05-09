@@ -1,27 +1,27 @@
 from django.contrib import admin
-from .models import SavedText, UserTyping
+from .models import SavedText, UserTyping, TypingEvent, Exercise
 
-# Enregistrement de SavedText dans l'admin avec une personnalisation
+@admin.register(SavedText)
 class SavedTextAdmin(admin.ModelAdmin):
-    list_display = ('text', 'score', 'created_at', 'updated_at')  # Si tu as `updated_at` dans le modèle
-    list_filter = ('created_at',)  # Si tu ne veux pas filtrer par `updated_at`, retire-le
+    list_display   = ('text', 'score', 'created_at', 'updated_at')
+    list_filter    = ('created_at', 'updated_at')
     list_editable = ('score',)
+    search_fields = ('text',)
 
-admin.site.register(SavedText, SavedTextAdmin)
-
-
-# Enregistrement de UserTyping dans l'admin avec une personnalisation
-
+@admin.register(UserTyping)
 class UserTypingAdmin(admin.ModelAdmin):
-    list_display = ('session_id', 'cursor_position', 'text_progression', 'created_at')  # Liste des champs à afficher
-    list_filter = ('session_id',)  # Filtrer par session_id
-    search_fields = ('session_id',)  # Permet de chercher par session_id
-
-admin.site.register(UserTyping, UserTypingAdmin)
-from django.contrib import admin
-from .models import TypingEvent
+    list_display  = ('session_id', 'cursor_position', 'text_progression', 'created_at')
+    list_filter   = ('session_id',)
+    search_fields = ('session_id',)
 
 @admin.register(TypingEvent)
 class TypingEventAdmin(admin.ModelAdmin):
-    list_display = ("session_id", "cursor_position", "text_progression", "timestamp")
-    ordering = ("-timestamp",)  # Trie par date décroissante
+    list_display = ('session_id', 'cursor_position', 'text_progression', 'timestamp')
+    ordering     = ('-timestamp',)
+
+@admin.register(Exercise)
+class ExerciseAdmin(admin.ModelAdmin):
+    list_display   = ('title', 'author', 'created_at')
+    list_filter    = ('author', 'created_at')
+    search_fields  = ('title', 'xml_content')
+    date_hierarchy = 'created_at'
