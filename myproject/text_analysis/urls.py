@@ -6,6 +6,8 @@ from .views import save_typing_event
 from django.contrib.auth import views as auth_views
 from . import views
 
+
+
 app_name = 'text_analysis' 
 
 urlpatterns = [
@@ -21,6 +23,8 @@ urlpatterns = [
     path("save_typing_event/", save_typing_event, name="save_typing_event"),
     path('login/', auth_views.LoginView.as_view(template_name='login.html'), name='login'),
     path('logout/', auth_views.LogoutView.as_view(), name='logout'),
+        path('teacher/dashboard/', views.teacher_dashboard, name='teacher_dashboard'),
+    path('teacher/add-exercise/', views.add_exercise,     name='add_exercise'),
 ]
 
 

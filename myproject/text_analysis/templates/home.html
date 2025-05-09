@@ -118,7 +118,37 @@
     </style>
 </head>
 <body>
+    <h2>Correcteur de texte</h2>
 
+    <!-- Sélecteur d'exercice -->
+    <form method="get" class="exercise-selector">
+      <label for="exercise">Choisir un exercice :</label>
+      <select name="exercise" id="exercise" onchange="this.form.submit()">
+        <option value="">-- Aucun --</option>
+        {% for ex in exercises %}
+          <option value="{{ ex.id }}" {% if ex.id|stringformat:"s" == selected_id %}selected{% endif %}>
+            {{ ex.title }}
+          </option>
+        {% endfor %}
+      </select>
+    </form>
+  
+    <!-- Si un exercice est chargé, vous pouvez afficher son XML ou le pré-charger -->
+    {% if exercise_xml %}
+      <div class="exercise-content">
+        <h3>Énoncé :</h3>
+        <pre>{{ exercise_xml }}</pre>
+        <!-- ou injectez-le directement dans votre textarea… -->
+      </div>
+    {% endif %}
+  
+    <!-- Vient ensuite votre formulaire d’analyse existant -->
+    <form method="POST">
+      {% csrf_token %}
+      <textarea name="text" …>{{ request.POST.text }}</textarea><br>
+      <button type="submit" class="btn-analyze">Analyser</button>
+    </form>
+  
     <div class="container">
         <h2>Correcteur de texte</h2>
         
@@ -238,3 +268,7 @@
     </script>
 </body>
 </html>
+
+
+
+

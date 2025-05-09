@@ -1,6 +1,8 @@
 from django.http import JsonResponse
 from django.shortcuts import render, redirect, get_object_or_404
-from .models import SavedText
+from .models import SavedText, Exercise 
+from .forms import ExerciseForm
+from django.contrib.auth.decorators import login_required
 import spacy
 from spellchecker import SpellChecker
 import re
@@ -134,7 +136,21 @@ def correct_text(text):
         "grammar_errors": grammar_errors,
         "special_messages": special_messages  # Ajout de messages spéciaux dans un champ séparé
     }
+
 def home(request):
+    # 1. Récupérer tous les exercices
+    exercises = Exercise.objects.all()
+
+    # 2. Récupérer, si présent, l'exercice sélectionné en GET
+    exercise_id  = request.GET.get('exercise')
+    exercise_content = ''
+    if exercise_id:
+        try:
+            exercise_content = Exercise.objects.get(pk=exercise_id).content
+        except Exercise.DoesNotExist:
+            exercise_content = ''
+
+    # 3. correction (POST)
     result = None
     saved_texts = SavedText.objects.all()  # Récupère tous les textes sauvegardés
 
@@ -157,7 +173,7 @@ def home(request):
             )
             return redirect('text_analysis:home')  # Redirige après avoir sauvegardé
 
-    return render(request, 'home.html', {'result': result, 'saved_texts': saved_texts})
+    return render(request, 'home.html', {'exercises':    exercises, 'selected_id':  exercise_id, 'exercise_content': exercise_content, 'result': result, 'saved_texts': saved_texts})
 
 def save_text(request):
     if request.method == "POST":
@@ -310,3 +326,24 @@ def save_typing_event(request):
             return JsonResponse({"error": str(e)}, status=400)
 
     return JsonResponse({"message": "Méthode non autorisée"}, status=405)
+
+
+@login_required
+def teacher_dashboard(request):
+    exercises = Exercise.objects.filter(author=request.user)
+    return render(request, 'text_analysis/teacher_dashboard.html', {
+        'exercises': exercises
+    })
+
+@login_required
+def add_exercise(request):
+    if request.method == 'POST':
+        form = ExerciseForm(request.POST)
+        if form.is_valid():
+            ex = form.save(commit=False)
+            ex.author = request.user
+            ex.save()
+            return redirect('text_analysis:teacher_dashboard')
+    else:
+        form = ExerciseForm()
+    return render(request, 'add_exercise.html', {'form': form})

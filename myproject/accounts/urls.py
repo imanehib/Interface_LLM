@@ -4,7 +4,8 @@ from .views import (
     CustomLogoutView,
     signup_choice,
     student_signup,
-    professor_signup
+    professor_signup,
+    dashboard
 )
 
 app_name = 'accounts'
@@ -15,4 +16,5 @@ urlpatterns = [
     path('signup/', signup_choice, name='signup_choice'),
     path('signup/student/', student_signup, name='student_signup'),
     path('signup/professor/', professor_signup, name='professor_signup'),
+    path('dashboard/', dashboard,                  name='dashboard'),
 ]
